@@ -1,11 +1,11 @@
-function [x_truth,y_measure] = generate_truth_measurement(Nsteps,x_ini,P_ini,Q_ini,R_ini,H,F,T)
-chol_P=chol(P_ini)';
-if Q_ini == zeros(3)
+function [x_truth,y_measure] = generate_truth_measurement(Nsteps,x_ini,P,Q,R,H,F,T)
+chol_P=chol(P)';
+if Q == zeros(3)
     chol_Q = zeros(3);
 else
-    chol_Q=chol(Q_ini)';
+    chol_Q=chol(Q)';
 end
-chol_R=chol(R_ini)';
+chol_R=chol(R)';
 independent_P_noise = randn(3, Nsteps);
 independent_Q_noise = randn(3, Nsteps);
 independent_R_noise = randn(3, Nsteps);
