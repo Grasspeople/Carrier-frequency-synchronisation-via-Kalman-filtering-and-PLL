@@ -1,9 +1,8 @@
-function [x_truth,y_measure] = generate_truth_measurement(Nsteps,x_ini,Q,R,F,T)
-
+function [x_truth,y_measure] = generate_truth_measurement(Nsteps,x_ini,Q,R,F)
 if Q == zeros(3)
     chol_Q = zeros(3);
 else
-    chol_Q=chol(Q)';
+    chol_Q = chol(Q)';
 end
 chol_R=chol(R)';
 independent_Q_noise = randn(3, Nsteps);
