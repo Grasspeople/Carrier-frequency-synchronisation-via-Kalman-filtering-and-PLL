@@ -1,4 +1,4 @@
-function draw_filtered(Nsteps,y_measure,x_truth,x_u_series)
+function draw_filtered(Nsteps,x_u_series,x_truth)
     orange = [1 0.34 0.20]; 
     lightgrey = [0.94 0.94 0.94]; % color definition
     blue = [0.21 0.35 1]; 
