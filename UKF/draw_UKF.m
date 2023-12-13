@@ -10,7 +10,7 @@ function draw_UKF(Nsteps,x_u_series,x_truth)
     hold on     
     plot((1:Nsteps),x_u_series(1,:),'.-','Color',orange)
     ylim([0 200]);
-    title('Truth vs EKF')
+    title('Truth vs UKF')
     legend('truth','UKF','Location','northwest'); 
     xlabel('Nsteps')
     ylabel('phase[rad]')
