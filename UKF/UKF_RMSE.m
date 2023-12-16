@@ -1,12 +1,13 @@
 clear
+rng(12,'twister')
 %%
 %Number of steps
 Nsteps =200;
 
 x_ini=[pi/2,20,0]';
 P=diag([(pi^2)/3 1 1]);
-Q=diag([0.1 0.1 0.1]);%covariance matrix
-R=0.01*diag([(pi/3)^2 (pi/3)^2]);
+Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
+R=diag([(pi/3)^2 (pi/3)^2]);
 N_x=3;
 lambda=10^(-5);
 
@@ -25,7 +26,6 @@ P_k=P;
 %%
 draw_UKF(Nsteps,x_u_series,x_truth)    
 %%
-rng(12, 'twister')
 %MC simulation
 Nmc=1000; %Number of Monte Carlo runs
 independent_R_noise = randn(2, Nsteps);
@@ -44,3 +44,4 @@ ylabel('RMS phase error [rad]')
 xlabel('Nsteps')
 grid on
 axis([ 0 Nsteps 0 max(rmse_error_t)+0.05]) 
+%averageValue_UKF = mean(rmse_error_t(:))

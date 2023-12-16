@@ -1,7 +1,8 @@
 clear
+rng(12,'twister')
 %%
 %Number of steps
-Nsteps =100;
+Nsteps =200;
 
 x_ini=[pi/2,20,0]';
 P=diag([(pi^2)/3 1 1]);
@@ -74,7 +75,6 @@ RMSE_tol=zeros(Nsteps,Nmc);
 % hold off;
 
 %-----------------------ORIGIN------------------------------------
-rng(0, 'twister')
 for i=1:Nmc
         
     %Measurements
@@ -92,5 +92,6 @@ xlabel('Nsteps')
 grid on
 
 axis([ 0 Nsteps 0 max(rmse_error_t)+0.05]) 
+%averageValue_EKF = mean(rmse_error_t(:))
 
 
