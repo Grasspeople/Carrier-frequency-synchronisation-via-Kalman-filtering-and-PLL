@@ -1,9 +1,7 @@
-function [x_u_series,RMSE] = UKF(Nsteps,x_ini,P,R,Q,F,y_measure,N_x,x_truth)
+function [x_u_series,RMSE] = UKF(Nsteps,x_ini,P,R,Q,F,y_measure,N_x,x_truth,lambda)
 x_u_series=zeros(3,Nsteps);
-%sum_error2_squared_t=zeros(Nsteps,1);
 x_u_series(:,1)=[pi/2,20,0]';
 RMSE=zeros(Nsteps,1);
-lambda=10^(-5);
 sum_error2_squared_t=zeros(Nsteps);
 
 for k=1:Nsteps
@@ -40,7 +38,7 @@ for k=1:Nsteps
 
     
     K_gain=C/S;
-    x_u=x_ini+K_gain*(y_measure(:,k)-miu);
+    x_u=x_ini+K_gain*(y_measure(:,k)-miu);%x_u是mean，x_ini是估计mean
     P_u=P-K_gain*S*K_gain';
     %P_u(abs(P_u) < 1e-15) = 0;%solution
     x_u_series(:,k)=x_u;
@@ -48,19 +46,18 @@ for k=1:Nsteps
 %%
     %Prediction
     [X,W_m,W_c] = generate_sigma_point(x_u, P_u, N_x,lambda);% X and W are matrix
-    
     X_hat=F*X;
-    x_ini=[0;0;0];
+    x_ini=[0,0,0]';%这是m-
     for i=1:2*N_x+1
-    x_ini=x_ini+W_m(i)*X_hat(:,i);
+    x_ini=x_ini+W_m(i)*X_hat(:,i);%这是m-，已计算出
     end
 
     P=zeros(3);
     for i=1:2*N_x+1
     P=P+W_c(i)*(X_hat(:,i)-x_ini)*(X_hat(:,i)-x_ini)';
     end
-    P=P+Q;
-
+    P=P+Q;%此时P计算出
+    %disp(P)%NOTE:我在这里展示了第一次计算的P
     
 
     %We sum all errors
