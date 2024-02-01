@@ -4,7 +4,7 @@ rng(n,'twister');
 %%
 %Number of steps\
 
-Nsteps =300;
+Nsteps = 100;
 x_ini_UKF=[pi/2,20,0]';
 P=diag([(pi^2)/3 1 1]);
 Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
@@ -16,7 +16,7 @@ F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 %%
 %UKF
 %MC simulation
-Nmc=10000; %Number of Monte Carlo runs
+Nmc=1000; %Number of Monte Carlo runs
 independent_R_noise = randn(2, Nsteps);
 chol_R=chol(R)';
 N = chol_R * independent_R_noise;

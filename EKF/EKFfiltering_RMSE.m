@@ -2,7 +2,7 @@ clear
 rng(12,'twister')
 %%
 %Number of steps
-Nsteps =200;
+Nsteps =100;
 
 x_ini=[pi/2,20,0]';
 P=diag([(pi^2)/3 1 1]);
@@ -92,6 +92,6 @@ xlabel('Nsteps')
 grid on
 
 axis([ 0 Nsteps 0 max(rmse_error_t)+0.05]) 
-%averageValue_EKF = mean(rmse_error_t(:))
+averageValue_EKF = mean(rmse_error_t(:))
 
 

@@ -9,10 +9,10 @@ P=diag([(pi^2)/3 1 1]);
 Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
 R=diag([(pi/3)^2 (pi/3)^2]);
 N_x=3;
-alpha=10^(-3);
-kappa=0; %3-n
-lambda=alpha^2*(3+kappa)-3;% eq.8.74:n=3
-
+alp=10^(-3);
+KAPPA=0; %3-n
+lambda=alp^2*(3+KAPPA)-3;% eq.8.74:n=3
+%disp(lambda)
 
 T=0.05;%sampling period
 F=[1 T (T^2)/2; 0 1 T; 0 0 1];

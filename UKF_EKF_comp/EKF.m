@@ -24,7 +24,7 @@ for k=1:Nsteps
 
     %We sum all errors
     sum_error2_squared_t(k)=sum_error2_squared_t(k)+(x_truth(1,k)-x_u_series(1,k))^2;
-    RMSE(k)=sum_error2_squared_t(k)/k;
+    RMSE(k)=sqrt(sum_error2_squared_t(k)/k);
 
     
 end 

@@ -13,6 +13,7 @@ for k=1:Nsteps
 %%   
     %Update
     [X,W_m,W_c] = generate_sigma_point(x_ini, P, N_x,lambda);
+    %disp(X)
     
     %Value of Y
     for i=1:2*N_x+1
@@ -40,6 +41,7 @@ for k=1:Nsteps
     K_gain=C/S;
     x_u=x_ini+K_gain*(y_measure(:,k)-miu);%x_u是mean，x_ini是估计mean
     P_u=P-K_gain*S*K_gain';
+    %disp(P)%NOTE:我在这里展示了第一次计算的P
     %P_u(abs(P_u) < 1e-15) = 0;%solution
     x_u_series(:,k)=x_u;
 
@@ -57,12 +59,12 @@ for k=1:Nsteps
     P=P+W_c(i)*(X_hat(:,i)-x_ini)*(X_hat(:,i)-x_ini)';
     end
     P=P+Q;%此时P计算出
-    %disp(P)%NOTE:我在这里展示了第一次计算的P
+    
     
 
     %We sum all errors
     sum_error2_squared_t(k)=sum_error2_squared_t(k)+(x_truth(1,k)-x_u_series(1,k))^2;
-    RMSE(k)=sum_error2_squared_t(k)/k;
+    RMSE(k)=sqrt(sum_error2_squared_t(k)/k);
 
     
 end 

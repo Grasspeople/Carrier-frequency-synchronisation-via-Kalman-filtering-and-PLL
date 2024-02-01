@@ -3,7 +3,7 @@ x_u_series=zeros(3,Nsteps);
 %sum_error2_squared_t=zeros(Nsteps,1);
 x_u_series(:,1)=[pi/2,20,0]';
 RMSE=zeros(Nsteps,1);
-lambda=10^(-5);
+lambda=0;
 sum_error2_squared_t=zeros(Nsteps);
 
 for k=1:Nsteps
@@ -65,7 +65,7 @@ for k=1:Nsteps
 
     %We sum all errors
     sum_error2_squared_t(k)=sum_error2_squared_t(k)+(x_truth(1,k)-x_u_series(1,k))^2;
-    RMSE(k)=sum_error2_squared_t(k)/k;
+    RMSE(k)=sqrt(sum_error2_squared_t(k)/k);
 
     
 end 
