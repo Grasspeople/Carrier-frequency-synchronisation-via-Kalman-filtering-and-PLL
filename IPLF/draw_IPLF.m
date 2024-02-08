@@ -8,7 +8,7 @@ function draw_IPLF(Nsteps,x_u_series,x_truth)
     figure(1)
     plot((1:Nsteps),x_truth(1,:),'.-','Color',blue)
     hold on     
-    plot((1:Nsteps),x_u_series(1,:),'.-','Color',orange)
+    plot((1:Nsteps),x_u_series(1,1:Nsteps),'.-','Color',orange)
     title('Truth vs IPLF')
     legend('truth','IPLF','Location','northwest'); 
     xlabel('Nsteps')

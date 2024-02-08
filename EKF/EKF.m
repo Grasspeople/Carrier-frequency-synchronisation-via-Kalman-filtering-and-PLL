@@ -1,7 +1,7 @@
 function [x_u_series,RMSE] = EKF(Nsteps,x_ini,P_k,R,Q,F,y_measure,x_truth)
 x_u_series=zeros(3,Nsteps);
 sum_error2_squared_t=zeros(Nsteps,1);
-x_u_series(:,1)=x_ini;
+x_u_series(:,1)=[0;0;0];
 RMSE=zeros(Nsteps,1);
 
 for k=1:Nsteps
@@ -13,7 +13,7 @@ for k=1:Nsteps
     S=H*P_k*H'+R;
     K_gain=P_k*H'/S;%[3*2]
     x_u=x_ini+K_gain*v_k;
-    
+%     x_u_series(:,k)=x_u;
     P_u=P_k-K_gain*S*K_gain';
 
     %Prediction

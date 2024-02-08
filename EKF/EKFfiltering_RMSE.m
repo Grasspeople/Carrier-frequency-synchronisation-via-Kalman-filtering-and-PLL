@@ -10,7 +10,7 @@ Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
 R=diag([(pi/3)^2 (pi/3)^2]);
 
 
-T=0.05;%sampling period
+T=0.01;%sampling period
 F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 
 [x_truth,y_measure] = generate_truth_measurement(Nsteps,x_ini,Q,R,F);
@@ -18,9 +18,7 @@ F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 %%
 %Extended Kalman filter
 %initialisation
-x_k=x_ini;
 P_k=P;
-
 [x_u_series,RMSE] = EKF(Nsteps,x_ini,P_k,R,Q,F,y_measure,x_truth);
 
 %%
@@ -75,8 +73,7 @@ RMSE_tol=zeros(Nsteps,Nmc);
 % hold off;
 
 %-----------------------ORIGIN------------------------------------
-for i=1:Nmc
-        
+for i=1:Nmc      
     %Measurements
     [x_truth,y_measure_mc] = generate_truth_measurement(Nsteps,x_ini,Q,R,F);
     [x_u_series,RMSE_tol(:,i)] = EKF(Nsteps,x_ini,P_k,R,Q,F,y_measure_mc,x_truth);

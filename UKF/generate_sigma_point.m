@@ -5,10 +5,10 @@ function [X,W_m,W_c] = generate_sigma_point(x_u, P_u, N_x,lambda)
     %sigma points matrix, 2*N_x+1 sigma points
     X=zeros(N_x,2*N_x+1);
     % Calculate the cholesky
-     chol_P=chol(P_u,'lower');%FIXME:这里的P_u不能正定 (下三角矩阵）
-%      P_coeff=sqrt(N_x)*chol_P; %NOTE:为了解决不能chol的问题，我换了sqrtm(P）去尝试
+%      chol_P=chol(P_u,'lower');%FIXME:here Pu not positive definite
+     chol_P=chol(3*P_u);
 %     sqrt_P=sqrtm(P_u);%FIXME:这里的P_u不能正定
-    P_coeff=sqrt(3+lambda)*chol_P; %NOTE:为了解决不能chol的问题，我换了sqrtm(P）去尝试
+    P_coeff=chol_P; %NOTE:为了解决不能chol的问题，我换了sqrtm(P）去尝试
     
     % Assign the zeroth sigma point
     X(:,1)=x_u;
@@ -19,15 +19,14 @@ function [X,W_m,W_c] = generate_sigma_point(x_u, P_u, N_x,lambda)
         X(:,i)=x_u+P_coeff(:,i-1);
         X(:,i+N_x)=x_u-P_coeff(:,i-1);
     end
-%*************************************************
-%     W_c = [0; 1/6; 1/6; 1/6; 1/6; 1/6; 1/6];
-%     W_m = [0; 1/6; 1/6; 1/6; 1/6; 1/6; 1/6];
-%**************************************************
 %***********************************************************************
-  apl=10^(-3);
-  beta=2;
-  W_c = [lambda/(lambda+3)+(1-apl^2+beta); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda))];
-  W_m = [lambda/(lambda+3); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda))];
+%   apl=10^(-3);
+%   beta=2;
+% W_c = [lambda/(lambda+3)+(1-apl^2+beta); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda))];
+% W_m = [lambda/(lambda+3); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda))];
+  W_c = [1/3; 1/9; 1/9; 1/9; 1/9; 1/9; 1/9;];
+  W_m = [1/3; 1/9; 1/9; 1/9; 1/9; 1/9; 1/9;];%change the w0 to 1/3
+  
 %***********************************************************************
 
 

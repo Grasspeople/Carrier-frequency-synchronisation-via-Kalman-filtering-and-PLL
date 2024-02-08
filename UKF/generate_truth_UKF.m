@@ -18,6 +18,7 @@ x_truth(:,1) = x_ini + V(:,1);
 y_measure=zeros(2,Nsteps);
 h=zeros(2,Nsteps);
 
+%test
 h(1,1)=cos(x_truth(1,1));
 h(2,1)=sin(x_truth(1,1));
 y_measure(:,1)=h(:,1)+N(:,1);

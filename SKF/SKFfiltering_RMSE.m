@@ -6,7 +6,7 @@ Nsteps = 100;
 x_ini=[pi/2,20,0]';
 %x_ini_1 = [0,0,0]';
 P=diag([(pi^2)/3 1 1]);%(pi^2)/3
-Q=diag([0.1 0.1 0.1]);%covariance matrix%Q is fixed
+Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix%Q is fixed
 R=(pi/3)^2;
 H = [1 0 0];%observation matrix
 T=0.05;%sampling period
@@ -23,7 +23,7 @@ P_k=P;
 draw_filtered(Nsteps,y_measure,x_truth,x_u_series)     
 %%
 %MC simulation
-Nmc=10000; %Number of Monte Carlo runs
+Nmc=1000; %Number of Monte Carlo runs
 
 independent_R_noise = randn(1, Nsteps);
 chol_R=chol(R)';
