@@ -12,14 +12,13 @@ alp=10^(-3);
 KAPPA=0; %3-n
 lambda=alp^2*(3+KAPPA)-3;% eq.8.74:n=3
 
-
-
 T=0.01;%sampling period
 F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 
 [x_truth,y_measure] = generate_truth_IPLF(Nsteps,x_0,Q,R,F);
 %% IPLF
-[x_u_series,RMSE] = IPLF(Nsteps,x_0,P_0,R,Q,F,N_x,x_truth,lambda,N_it,y_measure);
+[x_u_series,RMSE,cov_pos_j] = IPLF(Nsteps,x_0,P_0,R,Q,F,N_x,x_truth,lambda,N_it,y_measure);
+disp(cov_pos_j);
 %%
 draw_IPLF(Nsteps,x_u_series,x_truth)    
 %%
@@ -44,4 +43,4 @@ grid on
 axis([ 0 Nsteps 0 max(rmse_error_t)+0.05]) 
 
 averageValue_IPLF = mean(rmse_error_t(:));
-fprintf('%0.10f\n', averageValue_IPLF);
+ fprintf('%0.5f\n', averageValue_IPLF);

@@ -20,6 +20,7 @@ F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 
 %% IPLF
 N_it=1;
+N_steps=99;
 [x_u_series_1,RMSE_1] = IPLF(Nsteps,x_0,P_0,R,Q,F,N_x,x_truth,lambda,N_it,y_measure);
 [f1, xi1] = ksdensity(x_u_series_1(1,:));
 plot(xi1, f1, 'r', 'LineWidth', 0.5);

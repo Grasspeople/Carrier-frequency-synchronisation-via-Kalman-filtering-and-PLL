@@ -1,4 +1,4 @@
-function [x_u_series,RMSE] = EKF(Nsteps,x_ini,P_k,R,Q,F,y_measure,x_truth)
+function [x_u_series,RMSE,P_u] = EKF(Nsteps,x_ini,P_k,R,Q,F,y_measure,x_truth)
 x_u_series=zeros(3,Nsteps);
 sum_error2_squared_t=zeros(Nsteps,1);
 x_u_series(:,1)=[0;0;0];
