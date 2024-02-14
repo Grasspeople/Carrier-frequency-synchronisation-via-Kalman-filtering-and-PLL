@@ -3,7 +3,7 @@ function [x_u_series,RMSE,cov_pos_j] = IPLF(Nsteps,x_0,P_0,R,Q,F,N_x,x_truth,lam
 %%
 x_u_series=zeros(3,Nsteps);
 RMSE=zeros(Nsteps,1);
-sum_error2_squared_t=zeros(Nsteps);
+
 meank=x_0;
 Pk=P_0;
 %N_it_t=N_it*zeros(1,Nsteps);
@@ -14,9 +14,7 @@ for k=1:Nsteps
     cov_pos_j=Pk;
     for p=1:N_it 
         [X,W] = generate_sigma_point_IPLF(mean_pos_j, cov_pos_j, N_x,lambda);
-        miu=zeros(2,1);
-        S=zeros(2,2);
-        C=zeros(3,2); 
+ 
         Y_u_series=zeros(2,2*N_x+1);
         %Value of Y
         for i=1:2*N_x+1
@@ -24,15 +22,14 @@ for k=1:Nsteps
             Y_u_series(:,i)=Y_u;            
         end
 
+        miu=Y_u_series*W;
+        S=zeros(2,2);
+        C=zeros(3,2);
         for i=1:2*N_x+1
-            miu=miu+W(i)*Y_u_series(:,i);%Predicted mean
+            sub_z_j=Y_u_series(:,i)-miu;
+            S=S+W(i)*(sub_z_j*sub_z_j');%predicted covariance of the measurement
+            C=C+W(i)*(X(:,i)-mean_pos_j)*sub_z_j';%cross-covariance of the state and the measurement
         end
-
-        for i=1:2*N_x+1
-            S=S+W(i)*(Y_u_series(:,i)-miu)*(Y_u_series(:,i)-miu)';%predicted covariance of the measurement
-            C=C+W(i)*(X(:,i)-mean_pos_j)*(Y_u_series(:,i)-miu)';%cross-covariance of the state and the measurement
-        end
-            S=S+R;
 
             %Statistical linear regression parameters
             A_l=C'/cov_pos_j;
@@ -47,12 +44,14 @@ for k=1:Nsteps
             sub_x=y_measure(:,k)-miu_j;
 
             mean_update=meank+Psi_j/S_j*sub_x;
+            
             var_update=Pk-Psi_j/S_j*Psi_j';
             mean_pos_j=mean_update;
             cov_pos_j=var_update;
     end
         x_u_series(:,k)=mean_update;
          %We sum all errors
+        sum_error2_squared_t=zeros(Nsteps);
         sum_error2_squared_t(k)=sum_error2_squared_t(k)+(x_truth(1,k)-x_u_series(1,k))^2;
         RMSE(k)=sqrt(sum_error2_squared_t(k)/k); 
     %% IPLF Prediction
