@@ -41,23 +41,22 @@ for k=1:Nsteps
                     
             %KF (10.15)            miu_j=A_l*x_ini+b_l;
             miu_j=A_l*meank+b_l;
-
-            S_j=A_l*Pk*A_l'+Omega_l;
-            K_j=Pk*A_l'/S_j;
+            Psi_j=Pk*A_l';
+            S_j=A_l*Pk*A_l'+Omega_l+R;
             
             sub_x=y_measure(:,k)-miu_j;
 
-            mean_j=meank+K_j*sub_x;
-            P_j=Pk-K_j*S_j*K_j';  %本身是-          
-            mean_pos_j=mean_j;
-            cov_pos_j=P_j; 
+            mean_update=meank+Psi_j/S_j*sub_x;
+            var_update=Pk-Psi_j/S_j*Psi_j';
+            mean_pos_j=mean_update;
+            cov_pos_j=var_update;
     end
-        x_u_series(:,k)=mean_j;
+        x_u_series(:,k)=mean_update;
          %We sum all errors
         sum_error2_squared_t(k)=sum_error2_squared_t(k)+(x_truth(1,k)-x_u_series(1,k))^2;
         RMSE(k)=sqrt(sum_error2_squared_t(k)/k); 
     %% IPLF Prediction
-        [X,W] = generate_sigma_point_IPLF(mean_j, P_j, N_x,lambda);% X and W are matrix
+        [X,W] = generate_sigma_point_IPLF(mean_update, var_update, N_x,lambda);% X and W are matrix
         X_hat=F*X;
         var_pred=zeros(3,3);
         x_pred=[0;0;0];

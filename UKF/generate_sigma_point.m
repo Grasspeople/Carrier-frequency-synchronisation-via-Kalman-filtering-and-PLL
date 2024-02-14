@@ -5,7 +5,7 @@ function [X,W_m,W_c] = generate_sigma_point(x_u, P_u, N_x)
     %sigma points matrix, 2*N_x+1 sigma points
     X=zeros(N_x,2*N_x+1);
     % Calculate the cholesky
-    chol_P=sqrt(N_x)*chol(P_u);
+    chol_P=chol(4.5*P_u);
     P_coeff=chol_P; 
     
     % Assign the zeroth sigma point
@@ -17,7 +17,7 @@ function [X,W_m,W_c] = generate_sigma_point(x_u, P_u, N_x)
         X(:,i)=x_u+P_coeff(:,i-1);
         X(:,i+N_x)=x_u-P_coeff(:,i-1);
     end
-%***********************************************************************
+% %***********************************************************************
 %   apl=10^(-3);
 %   beta=2;
 % W_c = [lambda/(lambda+3)+(1-apl^2+beta); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda)); 1/(2*(3+lambda))];

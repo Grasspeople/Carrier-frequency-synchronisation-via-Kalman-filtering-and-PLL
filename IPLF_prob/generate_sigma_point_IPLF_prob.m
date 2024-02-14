@@ -5,8 +5,7 @@ function [X,W_m,W_c] = generate_sigma_point_IPLF_prob(x_u, P_u, N_x,lambda)
     %sigma points matrix, 2*N_x+1 sigma points
     X=zeros(N_x,2*N_x+1);
     % Calculate the cholesky
-    chol_P=chol((N_x+lambda)*P_u);
-%     chol_P=sqrt(4.5)*chol(P_u);
+    chol_P=sqrt(4.5)*chol(P_u);
     P_coeff=chol_P;
     
     % Assign the zeroth sigma point
