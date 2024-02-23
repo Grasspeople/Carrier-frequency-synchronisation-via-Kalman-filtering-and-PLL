@@ -29,18 +29,27 @@ end
 RMSE_UKF=sum(UKF_RMSE_tol,2)/Nmc;
 RMSE_EKF=sum(EKF_RMSE_tol,2)/Nmc;
 RMSE_IPLF=sum(IPLF_RMSE_tol,2)/Nmc;
-figure(1)
-plot(RMSE_UKF,LineWidth=1)
-hold on
-plot(RMSE_EKF,LineWidth=1)
-hold on
-plot(RMSE_IPLF,LineWidth=1)
-hold off
-ylabel('RMS phase error [rad]')
-xlabel('Nsteps')
-grid on
-legend('UKF','EKF','IPLF');
-% legend([RMSE_UKF, RMSE_EKF, RMSE_IPLF], {'UKF','EKF','IPLF'});
+%%
+orange = [1 0.34 0.20]; 
+    lightgrey = [0.94 0.94 0.94]; % color definition
+    blue = [0.21 0.35 1]; 
+    figure(1)
+    plot(RMSE_UKF,LineWidth=1)
+    hold on
+    plot(RMSE_EKF,LineWidth=1)
+    hold on
+    plot(RMSE_IPLF,LineWidth=1)
+    h1 = legend('UKF','EKF','IPLF'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',lightgrey) %filling colour of legend
+    set(h1,'Box','off') %Remove outer frame of legend
+    ylabel('RMS phase error [rad]')
+    xlabel('Nsteps')
+    grid on
+    box off
+     title('RMSE of EKF, UKF and IPLF')
 axis([ 0 Nsteps 0 max(RMSE_EKF)+0.05]) 
 averageValue_UKF = mean(RMSE_UKF(:));
 fprintf('RMSE_UKF=%0.5f\n', averageValue_UKF);

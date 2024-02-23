@@ -23,7 +23,7 @@ P_k=P;
 disp(P_u);
 
 %%
-draw_filtered(Nsteps,x_u_series,x_truth)    
+    
 %%
 %MC simulation
 Nmc=1000; %Number of Monte Carlo runs
@@ -40,7 +40,7 @@ for i=1:Nmc
     [x_u_series,RMSE_tol(:,i)] = EKF(Nsteps,x_ini,P_k,R,Q,F,y_measure_mc,x_truth);
     
 end
-
+draw_filtered(Nsteps,x_u_series,x_truth)
 rmse_error_t=sum(RMSE_tol,2)/Nmc;
 
 figure(2)

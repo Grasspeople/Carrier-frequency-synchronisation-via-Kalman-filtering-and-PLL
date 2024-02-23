@@ -1,4 +1,4 @@
-function [x_truth,y_measure] = generate_truth_measurement(Nsteps,x_ini,Q,R,F)
+function [x_truth_phase,y_measure] = generate_truth_PLL(Nsteps,x_ini,Q,R,F)
 if Q == zeros(3)
     chol_Q = zeros(3);
 else
@@ -22,7 +22,7 @@ h(1,1)=cos(x_truth(1,1));
 h(2,1)=sin(x_truth(1,1));
 y_measure(:,1)=h(:,1)+N(:,1);
 %%
-for k=2:Nsteps    
+for k=2:Nsteps   
     %Truth
     x_truth(:,k)=F*x_truth(:,k-1)+V(:,k);
     
@@ -31,4 +31,5 @@ for k=2:Nsteps
     h(2,k)=sin(x_truth(1,k));
     y_measure(:,k)=h(:,k)+N(:,k);
 end
+x_truth_phase=x_truth(1,:);
 end

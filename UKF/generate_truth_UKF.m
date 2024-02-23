@@ -21,6 +21,7 @@ h=zeros(2,Nsteps);
 %test
 h(1,1)=cos(x_truth(1,1));
 h(2,1)=sin(x_truth(1,1));
+
 y_measure(:,1)=h(:,1)+N(:,1);
 %%
 for k=2:Nsteps    
@@ -30,6 +31,7 @@ for k=2:Nsteps
     %Measurement
     h(1,k)=cos(x_truth(1,k));
     h(2,k)=sin(x_truth(1,k));
+
     y_measure(:,k)=h(:,k)+N(:,k);
 end
 end

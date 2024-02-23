@@ -13,7 +13,8 @@ for k=1:Nsteps
     mean_pos_j=meank;
     cov_pos_j=Pk;
     for p=1:N_it 
-        [X,W] = sigma_point_IPLF_comp(mean_pos_j, cov_pos_j, N_x,lambda);
+%         x0 = [0;0;0];
+        [X,W] = sigma_point_IPLF_comp(mean_pos_j, cov_pos_j, N_x,lambda);%以前x0是mean_pos_j
  
         Y_u_series=zeros(2,2*N_x+1);
         %Value of Y
