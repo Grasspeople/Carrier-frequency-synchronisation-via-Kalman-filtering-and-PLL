@@ -4,9 +4,9 @@ rng(12,'twister')
 %Number of steps
 Nsteps =100;
 
-x_ini=[pi/2,20,0]';
+x_ini=[pi/2,2000,0]';
 P=diag([(pi^2)/3 1 1]);
-Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
+Q=0.1*diag([0.1 0.1 0.1]);%covariance matrix
 R=diag([(pi/3)^2 (pi/3)^2]);
 
 
