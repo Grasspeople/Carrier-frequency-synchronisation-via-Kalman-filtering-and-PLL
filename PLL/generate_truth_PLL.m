@@ -1,4 +1,4 @@
-function [x_truth_phase,y_measure] = generate_truth_PLL(Nsteps,x_ini,Q,R,F)
+function [y_measure_re,y_theta,x_truth_phase,y_measure,x_truth] = generate_truth_PLL(Nsteps,x_ini,Q,R,F)
 if Q == zeros(3)
     chol_Q = zeros(3);
 else
@@ -31,5 +31,11 @@ for k=2:Nsteps
     h(2,k)=sin(x_truth(1,k));
     y_measure(:,k)=h(:,k)+N(:,k);
 end
+complexNumber_y = complex(y_measure(1,:), y_measure(2,:));
+y_theta = angle(complexNumber_y)+pi;
+complexNumber_N = complex(N(1,:), N(2,:));
+N_theta=angle(complexNumber_N)+pi;
+diff=y_theta-N_theta;
 x_truth_phase=x_truth(1,:);
+y_measure_re=x_truth_phase-diff;
 end

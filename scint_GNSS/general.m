@@ -65,13 +65,13 @@ rmse_IPLF=sum(RMSE_tol_IPLF,2)/Nmc;
     blue = [0.21 0.35 1]; 
     green = [0.1 0.8 0.5]; 
     purple = [0.75, 0.1, 0.75];
-    pink = [0.9, 0.5, 0.6]; %IPLF
+    brown = [0.65, 0.16, 0.16];
 
     plot((1:Nsteps),rmse_EKF,'.-','Color',blue)
     hold on     
     plot((1:Nsteps),rmse_UKF,'.-','Color',orange)
     hold on
-    plot((1:Nsteps),rmse_IPLF,'.-','Color',pink)
+    plot((1:Nsteps),rmse_IPLF,'.-','Color',brown)
     hold on
     plot((1:Nsteps),RMSE,'.-','Color',purple)
 
@@ -88,7 +88,7 @@ rmse_IPLF=sum(RMSE_tol_IPLF,2)/Nmc;
     xlabel('Nsteps')
     grid on
 
-axis([ 0 Nsteps 0 max(rmse_EKF)+0.05]) 
+axis([ 0 Nsteps 0 max(RMSE)+0.05]) 
 averageValue_EKF = mean(rmse_EKF(:))
 averageValue_UKF = mean(rmse_UKF(:))
 averageValue_IPLF = mean(rmse_IPLF(:))

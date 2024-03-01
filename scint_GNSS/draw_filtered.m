@@ -4,7 +4,7 @@ function [average_RMSE,RMSE]=draw_filtered(Nsteps,x_u_series_EKF,x_u_series_UKF,
     blue = [0.21 0.35 1]; %truth
     green = [0.1 0.8 0.5]; %observation
     purple = [0.75, 0.1, 0.75]; %1st PLL
-    pink = [0.9, 0.5, 0.6]; %IPLF
+    brown = [0.65, 0.16, 0.16];; %IPLF
     lightgrey = [0.94 0.94 0.94]; %bg
     xlabel('steps')
     ylabel('phase [rad]')
@@ -17,7 +17,7 @@ function [average_RMSE,RMSE]=draw_filtered(Nsteps,x_u_series_EKF,x_u_series_UKF,
     hold on
     plot((1:Nsteps),x_u_series_UKF(1,:),'.-','Color',black)
     hold on
-    plot((1:Nsteps),x_u_series_IPLF(1,:),'.-','Color',pink)
+    plot((1:Nsteps),x_u_series_IPLF(1,:),'.-','Color',brown)
     hold on
     plot((1:Nsteps),y_measure_re,'.-','Color',green)
     hold on
