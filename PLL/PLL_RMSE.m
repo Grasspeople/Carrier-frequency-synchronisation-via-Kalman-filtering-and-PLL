@@ -5,7 +5,7 @@ rng(12,'twister')
 Nsteps =100;
 Nmc = 1000;
 f=2000;
-BW=20*pi;%20Hz--40*pi///10Hz--20*pi///5Hz---10*pi
+BW=100*pi;%20Hz--40*pi///10Hz--20*pi///5Hz---10*pi
 RMSE_tot=zeros(Nsteps,Nmc);
 %% 2nd-order PLL
 for j = 1 : Nmc

@@ -40,7 +40,7 @@ end
 % PLL use it, other don't
 complexNumber_y = complex(y_measure(1,:), y_measure(2,:));
 y_theta = angle(complexNumber_y)+pi;
-complexNumber_N = complex(N(1,:), N(2,:));
+complexNumber_N = complex(N(1,:), N(2,:));%都是2pi内的
 N_theta=angle(complexNumber_N)+pi;
 diff=y_theta-N_theta;
 x_truth_phase=x_truth(1,:);

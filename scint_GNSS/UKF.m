@@ -13,12 +13,14 @@ for k=1:Nsteps
         ob_pred_point=magnitude(k)*[cos(X(1,i)+X(4,i));sin(X(1,i)+X(4,i))];
         ob_pred_point_series(:,i)=ob_pred_point;
     end
+    
     S=zeros(2,2);
     ob_pred = W_m(i) * ob_pred_point_series(:,i);  
     for i=1:2*N_x+1
         S = S + W_c(i) * (ob_pred_point_series(:,i) - ob_pred) * (ob_pred_point_series(:,i) - ob_pred)';
     end
     S=S+R;
+
     C=zeros(4,2);
     for i=1:2*N_x+1
         C=C+W_c(i) * (X(:,i)-x_pred)*(ob_pred_point_series(:,i)-ob_pred)';
