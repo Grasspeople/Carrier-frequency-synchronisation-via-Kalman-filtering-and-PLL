@@ -1,14 +1,18 @@
 clear
 rng(12,'twister')
-%%
-%Number of steps
-Nsteps = 100; N_it = 5; lambda=10^(-6)*3-3;
-x_ini=[pi/2,20,0]';
+%% Parameters
+Nsteps = 100; N_it = 5;                lambda=10^(-6)*3-3;
+f=2000;x_ini=[pi/2,f,0]';
 P=diag([(pi^2)/3 1 1]);
 Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
 R=diag([(pi/3)^2 (pi/3)^2]);
 N_x=3;
-T=0.01;%sampling period
+Nmc=1000;
+
+BW=100*pi;%20Hz--40*pi///10Hz--20*pi///5Hz---10*pi
+RMSE_tot=zeros(Nsteps,Nmc);
+RMSE_tot_3=zeros(Nsteps,Nmc);
+T=1/(5*f);%sampling period
 F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 Nmc=1000; %Number of Monte Carlo runs
 independent_R_noise = randn(2, Nsteps);
@@ -19,41 +23,141 @@ EKF_RMSE_tol=zeros(Nsteps,Nmc);
 IPLF_RMSE_tol=zeros(Nsteps,Nmc);
 for i=1:Nmc 
 % Measurements
-[x_truth,y_measure] = truth_comp(Nsteps,x_ini,Q,R,F);
+[y_measure_re,y_theta,x_truth_phase,y_measure,x_truth] = truth_comp(Nsteps,x_ini,Q,R,F);
 [x_u_series_UKF,UKF_RMSE_tol(:,i)] = UKF_comp(Nsteps,x_ini,P,R,Q,F,y_measure,N_x,x_truth);
 [x_u_series_EKF,EKF_RMSE_tol(:,i)] = EKF_comp(Nsteps,x_ini,P,R,Q,F,y_measure,x_truth);
 [x_u_series_IPLF,IPLF_RMSE_tol(:,i)] = IPLF_comp(Nsteps,x_ini,P,R,Q,F,N_x,x_truth,lambda,N_it,y_measure);
-
-
 end
+[y,y_3,RMSE,RMSE_tot,RMSE_tot_3,H2_s,H3_s]=PLL_RMSE(Nsteps,Nmc,f,BW,T,F,y_measure_re,x_truth_phase);
 RMSE_UKF=sum(UKF_RMSE_tol,2)/Nmc;
 RMSE_EKF=sum(EKF_RMSE_tol,2)/Nmc;
 RMSE_IPLF=sum(IPLF_RMSE_tol,2)/Nmc;
-%%
-orange = [1 0.34 0.20]; 
-    lightgrey = [0.94 0.94 0.94]; % color definition
-    blue = [0.21 0.35 1]; 
+RMSE_PLL_2=sum(RMSE_tot,2)/Nmc;
+RMSE_PLL_3=sum(RMSE_tot_3,2)/Nmc;
+%% Draw RMSE (whole)
     figure(1)
-    plot(RMSE_UKF,LineWidth=1)
+    orange = [1, 0.5, 0];% UKF
+    black = [0 0 0];% IPLF
+    blue = [0.21 0.35 1];% EKF 
+    %yellow = [1, 0.84, 0];% 3 PLL
+    %yellow = [0.8, 0.7, 0.1];
+    green=[0.4660 0.6740 0.1880];
+    purple = [0.54, 0.17, 0.89];% 2 PLL
+    white = [1 1 1];
+    
+    lightgrey = [0.94 0.94 0.94]; % color definition
+
+    plot((1:Nsteps),RMSE_EKF,'--','Color',blue,'LineWidth',2)
+    hold on     
+    plot((1:Nsteps),RMSE_UKF,'--','Color',orange,'LineWidth',2)
     hold on
-    plot(RMSE_EKF,LineWidth=1)
+    plot((1:Nsteps),RMSE_IPLF,'--','Color',black,'LineWidth',2)
     hold on
-    plot(RMSE_IPLF,LineWidth=1)
-    h1 = legend('UKF','EKF','IPLF'); 
+    plot((1:Nsteps),RMSE_PLL_3,'.-','Color',green,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),RMSE_PLL_2,'.-','Color',purple,'LineWidth',2)
+
+    h1 = legend('rmse(EKF)','rmse(UKF)','rmse(IPLF)','rmse(3rd-order-PLL)','rmse(2nd-order-PLL)','Location','northeast'); 
     set(gca,'linewidth',0.4); % thickness of grid
-    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridLineStyle',':');% type of grid
     set(gca,'GridAlpha',0.4); % dark of grid
-    set(h1,'Color',lightgrey) %filling colour of legend
-    set(h1,'Box','off') %Remove outer frame of legend
-    ylabel('RMS phase error [rad]')
-    xlabel('Nsteps')
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
     grid on
     box off
-     title('RMSE of EKF, UKF and IPLF')
-axis([ 0 Nsteps 0 max(RMSE_EKF)+0.05]) 
+    title('RMSE comparison')
+    ylabel('RMS phase error [rad]')
+    xlabel('Time step')
+    grid on
+%    axis([ 0 Nsteps 0 max(RMSE_PLL_2)+0.05]) 
+     axis([ 0 Nsteps 0 0.3]) 
+%% Output mean RMSE
 averageValue_UKF = mean(RMSE_UKF(:));
 fprintf('RMSE_UKF=%0.5f\n', averageValue_UKF);
 averageValue_EKF = mean(RMSE_EKF(:));
 fprintf('RMSE_EKF=%0.5f\n', averageValue_EKF);
 averageValue_IPLF = mean(RMSE_IPLF(:));
 fprintf('RMSE_IPLF=%0.5f\n', averageValue_IPLF);
+averageValue_PLL_2 = mean(RMSE_PLL_2(:));
+fprintf('RMSE_2_PLL=%0.5f\n', averageValue_PLL_2);
+averageValue_PLL_3 = mean(RMSE_PLL_3(:));
+fprintf('RMSE_3_PLL=%0.5f\n', averageValue_PLL_3);
+%% Draw tracking
+    orange = [1 0.34 0.20]; %UKF
+    black = [0 0 0]; %IPLF
+    blue = [0.21 0.35 1]; %EKF
+    green = [0.1 0.8 0.5]; %truth
+    purple = [0.75, 0.1, 0.75]; % 2 PLL
+    yellow = [0.8, 0.7, 0.1];% 3 PLL
+    brown = [0.65, 0.16, 0.16]; %observation
+    lightgrey = [0.94 0.94 0.94]; %bg
+    xlabel('steps')
+    ylabel('phase [rad]')
+
+    figure(2)
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
+    hold on     
+    plot((1:Nsteps),x_u_series_EKF(1,:),'.-','Color',blue,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),x_u_series_UKF(1,:),'.-','Color',orange,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),x_u_series_IPLF(1,:),'.-','Color',black,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),y_measure_re,'--','Color',brown,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),y,'.-','Color',purple,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),y_3,'.-','Color',yellow,'LineWidth',2)
+    h1 = legend('Truth','EKF','UKF','IPLF','Observation','2nd-order-PLL','3rd-order-PLL','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',lightgrey) %filling colour of legend
+    set(h1,'Box','off') %Remove outer frame of legend
+    grid on
+    box off
+    title('KFs vs PLL')
+    xlabel('Time step')
+    ylabel('phase[rad]')
+%% Draw Bode Plot
+    figure(3)
+    bode(H2_s);%check the BW
+    grid on
+    figure(4)
+    bode(H3_s);%check the BW
+    grid on
+%% Draw RMSE (part)
+    figure(4)
+    orange = [1, 0.5, 0];% UKF
+    black = [0 0 0];% IPLF
+    blue = [0.21 0.35 1];% EKF 
+    %yellow = [1, 0.84, 0];% 3 PLL
+    %yellow = [0.8, 0.7, 0.1];
+    green=[0.4660 0.6740 0.1880];
+    purple = [0.54, 0.17, 0.89];% 2 PLL
+    white = [1 1 1];
+    
+    lightgrey = [0.94 0.94 0.94]; % color definition
+
+    plot((1:Nsteps),RMSE_EKF,'--','Color',blue,'LineWidth',2)
+    hold on     
+    plot((1:Nsteps),RMSE_UKF,'--','Color',orange,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),RMSE_IPLF,'--','Color',black,'LineWidth',2)
+
+
+    h1 = legend('rmse(EKF)','rmse(UKF)','rmse(IPLF)','Location','northeast'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle',':');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    grid on
+    box off
+    title('RMSE comparison')
+    ylabel('RMS phase error [rad]')
+    xlabel('Time step')
+    grid on
+   axis([ 0 Nsteps 0 max(RMSE_EKF)+0.05]) 
+
+
