@@ -7,6 +7,7 @@ Nmc = 1000;
 f=2000;
 BW=100*pi;%20Hz--40*pi///10Hz--20*pi///5Hz---10*pi
 RMSE_tot=zeros(Nsteps,Nmc);
+RMSE_tot_3=zeros(Nsteps,Nmc);
 %% 2nd-order PLL
 for j = 1 : Nmc
     x_ini=[pi/2,f,0]';
@@ -78,10 +79,11 @@ for j = 1 : Nmc
         ydbuf = [y_3(i);ydbuf(1:2)];
     %We sum all errors
         sum_error2_squared_t(i)=sum_error2_squared_t(i)+(y_3(i)-x_3(i))^2;
-        RMSE_tot(i,j)=sqrt(sum_error2_squared_t(i)/i);
+        RMSE_tot_3(i,j)=sqrt(sum_error2_squared_t(i)/i);
     end
 end
-
+RMSE_3=sum(RMSE_tot_3,2)/Nmc;
+average_RMSE_3=sum(RMSE_3)/Nsteps
 
 %% Draw
 orange = [1 0.34 0.20];
@@ -111,7 +113,7 @@ plot((1:Nsteps),y_measure_re,'.-','Color',green)
 figure(2)
 plot(RMSE)
 ylabel('RMS phase error [rad]')
-xlabel('Nsteps')
+xlabel('Time step')
 grid on
 axis([ 0 Nsteps 0 max(RMSE)+0.01]) 
 figure(3)

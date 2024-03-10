@@ -14,11 +14,6 @@ for k=1:Nsteps
     %Prediction
     x_k=F*x_u;%x_u is former x
     P_k=F*P_u*F'+Q;%remove Q，this model is accurate
-    
-    
-    %RMSE
-    %We sum all error
-    
 end 
 
 end

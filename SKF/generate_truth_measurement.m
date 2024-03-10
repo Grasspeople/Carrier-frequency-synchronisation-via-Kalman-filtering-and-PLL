@@ -1,5 +1,5 @@
 function [x_truth,y_measure,y_measure_re,x_truth_phase] = generate_truth_measurement(Nsteps,x_ini,P,Q,R,H,F,T)
-%chol_P=chol(P)';
+chol_P=chol(P)';
 if Q == zeros(3)
     chol_Q = zeros(3);
 else
