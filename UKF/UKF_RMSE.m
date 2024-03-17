@@ -4,7 +4,7 @@ rng(12,'twister')
 %Number of steps
 Nsteps =100;
 
-x_ini=[pi/2,2000,0]';
+x_ini=[pi/2,2,0.5]';
 P=diag([(pi^2)/3 1 1]);
 Q=0.01*diag([0.1 0.1 0.1]);%covariance matrix
 R=diag([(pi/3)^2 (pi/3)^2]);
@@ -20,6 +20,7 @@ F=[1 T (T^2)/2; 0 1 T; 0 0 1];
 
 %%
 draw_UKF(Nsteps,x_u_series,x_truth)    
+pause(0.5)
 %%
 % MC simulation
 Nmc=1000; %Number of Monte Carlo runs
@@ -33,7 +34,7 @@ for i=1:Nmc
 [x_u_series_UKF,RMSE_tol(:,i)] = UKF(Nsteps,x_ini,P,R,Q,F,y_measure_mc,N_x,x_truth);
 end
 rmse_error_t=sum(RMSE_tol,2)/Nmc;
-figure(3)
+figure(2)
 plot(rmse_error_t)
 ylabel('RMS phase error [rad]')
 xlabel('Nsteps')

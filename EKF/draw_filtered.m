@@ -6,12 +6,15 @@ function draw_filtered(Nsteps,x_u_series,x_truth)
     ylabel('phase [rad]')
     %%    
     figure(1)
-    plot((1:Nsteps),x_truth(1,:),'.-','Color',blue)
-    hold on     
-    plot((1:Nsteps),x_u_series(1,:),'.-','Color',orange)
-    title('Truth vs EKF')
-    legend('truth','EKF','Location','northwest'); 
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',blue)      
+    title('Truth')
+    legend('truth','Location','northwest'); 
     xlabel('Nsteps')
     ylabel('phase[rad]')
-
+    figure(2)
+    plot((1:Nsteps),x_u_series(1,:),'.-','Color',orange)
+    title('EKF')
+    legend('EKF','Location','northwest'); 
+    xlabel('Nsteps')
+    ylabel('phase[rad]')
 end

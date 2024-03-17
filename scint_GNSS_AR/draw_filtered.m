@@ -8,8 +8,7 @@ function draw_filtered(Nsteps,x_u_series_EKF,x_u_series_UKF,x_u_series_IPLF,x_tr
     white=[1 1 1];
     brown = [0.65, 0.16, 0.16]; %observation
     lightgrey = [0.94 0.94 0.94]; %bg
-    xlabel('steps')
-    ylabel('phase [rad]')
+
     %%    
     figure(1)
     plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
@@ -31,6 +30,8 @@ function draw_filtered(Nsteps,x_u_series_EKF,x_u_series_UKF,x_u_series_IPLF,x_tr
     set(gca,'GridAlpha',0.4); % dark of grid
     set(h1,'Color',white) %filling colour of legend
     set(h1,'Box','on') %Remove outer frame of legend
+    ylim([-5 10])
+    yticks(-5:1:10); % 设置Y轴刻度
     grid on
     box off
     title('KFs vs PLL')

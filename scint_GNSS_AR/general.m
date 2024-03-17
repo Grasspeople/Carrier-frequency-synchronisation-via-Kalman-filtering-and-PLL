@@ -37,8 +37,7 @@ F=[1 T (T^2)/2 0; 0 1 T 0; 0 0 T 0; 0 0 0 beta];
 [x_u_series_IPLF,RMSE_IPLF] = IPLF(Nsteps,x_ini,P,R,Q,F,N_x,x_truth,N_it,y_measure);
 %% PLL
 [y,y_3,RMSE_2,RMSE_3] = PLL_RMSE(BW,f,Nsteps,T,y_measure_re,x_truth);
-%% Draw
-draw_filtered(Nsteps,x_u_series_EKF,x_u_series_UKF,x_u_series_IPLF,x_truth,y_measure_re,y,y_3)
+
 %% MC simulation
 independent_R_noise = randn(2, Nsteps);
 chol_R=chol(R)';
@@ -61,12 +60,41 @@ for i=1:Nmc
     [y,y_3,RMSE_tot_2(:,i),RMSE_tot_3(:,i)] = PLL_RMSE(BW,f,Nsteps,T,y_measure_re,x_truth);
 
 end
-
+%% Draw
+draw_filtered(Nsteps,x_u_series_EKF,x_u_series_UKF,x_u_series_IPLF,x_truth,y_measure_re,y,y_3) 
+%%
 rmse_EKF=sum(RMSE_tol_EKF,2)/Nmc;
 rmse_UKF=sum(RMSE_tol_UKF,2)/Nmc;
 rmse_IPLF=sum(RMSE_tol_IPLF,2)/Nmc;
 rmse_2=sum(RMSE_tot_2,2)/Nmc;
 rmse_3=sum(RMSE_tot_3,2)/Nmc;
+
+%% Visilization (pre)
+%     orange = [1 0.34 0.20]; %UKF
+%     black = [0 0 0]; %IPLF
+%     blue = [0.21 0.35 1]; %EKF
+%     green = [0.1 0.8 0.5]; %truth
+%     purple = [0.75, 0.1, 0.75]; % 2 PLL
+%     yellow = [0.8, 0.7, 0.1];% 3 PLL
+%     white=[1 1 1];
+%     brown = [0.65, 0.16, 0.16]; %observation
+%     lightgrey = [0.94 0.94 0.94]; %bg
+% x = 1:Nsteps;
+% M = [x_truth(1,:); y_measure_re; x_u_series_EKF(1,:); x_u_series_UKF(1,:);x_u_series_IPLF(1,:);y';y_3'];
+% color=[green;brown;blue;orange;black;purple;yellow];
+% figure;
+% set(gca,'linewidth',0.4);
+% set(gca,'GridLineStyle','-.');
+% set(gca,'GridAlpha',0.4);
+% 
+% grid on
+% hold on;
+% lineNames = {'Truth','Observation','EKF','UKF','IPLF','2nd-order-PLL','3rd-order-PLL'};
+% for i = 1:7 
+%     plot(x, M(i, :), '.-', 'Color',color(i,:),'LineWidth', 2); 
+%     legend(lineNames(1:i), 'Location', 'best'); 
+%     pause;
+% end
 
 %% Draw RMSE   
     figure(2)
@@ -115,7 +143,116 @@ averageValue_PLL_2 = mean(rmse_2);
 fprintf('RMSE_2_PLL=%0.5f\n', averageValue_PLL_2);
 averageValue_PLL_3 = mean(rmse_3);
 fprintf('RMSE_3_PLL=%0.5f\n', averageValue_PLL_3);
+%% Figure for report
+    orange = [1 0.34 0.20]; %UKF
+    black = [0 0 0]; %IPLF
+    blue = [0.21 0.35 1]; %EKF 
+    green = [0.1 0.8 0.5]; %truth
+    purple = [0.75, 0.1, 0.75]; % 2 PLL
+    yellow = [0.8, 0.7, 0.1];% 3 PLL
+    white=[1 1 1];
+    brown = [0.65, 0.16, 0.16]; %observation
+    lightgrey = [0.94 0.94 0.94]; %bg 
 
+    figure
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
+    hold on   
+    plot((1:Nsteps),y_measure_re,'--','Color',brown,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),x_u_series_EKF(1,:),'.-','Color',blue,'LineWidth',1.5)
+    h1 = legend('Truth','Observation','EKF','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    ylim([-5 10])
+    yticks(-5:1:10); % 设置Y轴刻度
+    grid on
+    box off
+    title('EKF')
+    xlabel('Time step')
+    ylabel('Phase[rad]')
+ 
+    figure
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
+    hold on   
+    plot((1:Nsteps),y_measure_re,'--','Color',brown,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),x_u_series_UKF(1,:),'.-','Color',orange,'LineWidth',1.5)
+    h1 = legend('Truth','Observation','UKF','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    ylim([-5 10])
+    yticks(-5:1:10); % 设置Y轴刻度
+    grid on
+    box off
+    title('UKF')
+    xlabel('Time step')
+    ylabel('Phase[rad]')
+
+    figure
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
+    hold on   
+    plot((1:Nsteps),y_measure_re,'--','Color',brown,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),x_u_series_IPLF(1,:),'.-','Color',black,'LineWidth',1.5)
+    h1 = legend('Truth','Observation','IPLF','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    ylim([-5 10])
+    yticks(-5:1:10); % 设置Y轴刻度
+    grid on
+    box off
+    title('IPLF')
+    xlabel('Time step')
+    ylabel('Phase[rad]')
+
+    figure
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
+    hold on   
+    plot((1:Nsteps),y_measure_re,'--','Color',brown,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),y,'.-','Color',purple,'LineWidth',1.5)
+     h1 = legend('Truth','Observation','2nd-order-PLL','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    ylim([-5 10])
+    yticks(-5:1:10); % 设置Y轴刻度
+    grid on
+    box off
+    title('2nd-order-PLL')
+    xlabel('Time step')
+    ylabel('Phase[rad]')
+
+    figure
+    plot((1:Nsteps),x_truth(1,:),'.-','Color',green,'LineWidth',3)
+    hold on   
+    plot((1:Nsteps),y_measure_re,'--','Color',brown,'LineWidth',2)
+    hold on
+    plot((1:Nsteps),y_3,'.-','Color',yellow,'LineWidth',1.5)
+    h1 = legend('Truth','Observation','3rd-order-PLL','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    ylim([-5 10])
+    yticks(-5:1:10); % 设置Y轴刻度
+    grid on
+    box off
+    title('3rd-order-PLL')
+    xlabel('Time step')
+    ylabel('Phase[rad]')
 
 
 

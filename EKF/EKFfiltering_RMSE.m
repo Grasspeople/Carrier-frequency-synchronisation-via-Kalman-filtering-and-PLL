@@ -4,7 +4,7 @@ rng(12,'twister')
 %Number of steps
 Nsteps =100;
 
-x_ini=[pi/2,2000,0]';
+x_ini=[pi/2,2,0.5]';
 P=diag([(pi^2)/3 1 1]);
 Q=0.1*diag([0.1 0.1 0.1]);%covariance matrix
 R=diag([(pi/3)^2 (pi/3)^2]);
@@ -43,7 +43,7 @@ end
 draw_filtered(Nsteps,x_u_series,x_truth)
 rmse_error_t=sum(RMSE_tol,2)/Nmc;
 
-figure(2)
+figure(3)
 plot(rmse_error_t)
 ylabel('RMS phase error [rad]')
 xlabel('Nsteps')

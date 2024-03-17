@@ -110,7 +110,82 @@ ylabel('RMS phase error [rad]')
 % bode(H3_s);%check the BW
 % grid on
 
+%% Figure for report
+figure;
+plot((1:Nsteps),x_truth(1,:),'.-', 'Color', green,'linewidth',2)
+hold on
+plot((1:Nsteps),y_measure_mc(1,:),'--','Color', brown,'linewidth',2)
+hold on
+plot((1:Nsteps),x_u_series(1,:),'.-','Color', blue,'linewidth',1.5)
+h1 = legend('Truth','Measurement','SKF','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    grid on
+    box off
+    title('SKF')
+%axis([ 0 Nsteps 0 max(RMSE_2)+0.05]) 
+xlabel('Time step')
+ylabel('Phase [rad]')
 
+figure;
+plot((1:Nsteps),x_truth(1,:),'.-', 'Color', green,'linewidth',2)
+hold on
+plot((1:Nsteps),y_measure_mc(1,:),'--','Color', brown,'linewidth',2)
+hold on
+plot((1:Nsteps),y,'.-','Color', purple,'linewidth',1.5)
+h1 = legend('Truth','Measurement','2nd-order-PLL','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    grid on
+    box off
+    title('2nd-order-PLL')
+%axis([ 0 Nsteps 0 max(RMSE_2)+0.05]) 
+xlabel('Time step')
+ylabel('Phase [rad]')
+
+figure;
+plot((1:Nsteps),x_truth(1,:),'.-', 'Color', green,'linewidth',2)
+hold on
+plot((1:Nsteps),y_measure_mc(1,:),'--','Color', brown,'linewidth',2)
+hold on
+plot((1:Nsteps),y_3,'.-','Color', orange,'linewidth',1.5)
+h1 = legend('Truth','Measurement','3rd-order-PLL','Location','northwest'); 
+    set(gca,'linewidth',0.4); % thickness of grid
+    set(gca,'GridLineStyle','-.');% type of grid
+    set(gca,'GridAlpha',0.4); % dark of grid
+    set(h1,'Color',white) %filling colour of legend
+    set(h1,'Box','on') %Remove outer frame of legend
+    grid on
+    box off
+    title('3rd-order-PLL')
+%axis([ 0 Nsteps 0 max(RMSE_2)+0.05]) 
+xlabel('Time step')
+ylabel('Phase [rad]')
+
+%% Visilization (pre)
+x = 1:Nsteps;
+M = [x_truth(1,:); y_measure_mc; x_u_series(1,:);y';y_3'];
+color=[green;brown;blue;purple;orange];
+figure;
+set(gca,'linewidth',0.4);
+set(gca,'GridLineStyle','-.');
+set(gca,'GridAlpha',0.4);
+set(h1,'Color',white)
+set(h1,'Box','on')
+grid on
+hold on;
+lineNames = {'Truth','Observation','SKF','2nd-order-PLL','3rd-order-PLL'};
+for i = 1:5 
+    plot(x, M(i, :), '.-', 'Color',color(i,:),'LineWidth', 2); 
+    legend(lineNames(1:i), 'Location', 'best'); 
+    pause;
+end
 
     
 
