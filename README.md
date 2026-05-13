@@ -34,6 +34,16 @@ The implementation includes several commonly used filtering approaches, allowing
 - Use MATLAB scripts as simple examples for learning and modification
 
 The code structure is relatively clear and each algorithm is placed in a separate folder, which makes it easier to follow and experiment with.
+## Citation
+
+If you find this repository helpful, please consider citing the following paper:
+
+```bibtex
+@inproceedings{li2024iterated,
+  title     = {Iterated Posterior Linearisation Filtering for Digital Carrier Synchronisation},
+  author    = {Li, Muyang and Garc{\'i}a-Fern{\'a}ndez, {\'A}ngel F.},
+  booktitle = {Proceedings of the 2024 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)},
+  year      = {2024}}
 
 ## Repository Structure
 
@@ -77,14 +87,4 @@ The code structure is relatively clear and each algorithm is placed in a separat
 │
 └── README.md
 
-}
-## Citation
 
-If you find this repository helpful, please consider citing the following paper:
-
-```bibtex
-@inproceedings{li2024iterated,
-  title     = {Iterated Posterior Linearisation Filtering for Digital Carrier Synchronisation},
-  author    = {Li, Muyang and Garc{\'i}a-Fern{\'a}ndez, {\'A}ngel F.},
-  booktitle = {Proceedings of the 2024 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)},
-  year      = {2024}
