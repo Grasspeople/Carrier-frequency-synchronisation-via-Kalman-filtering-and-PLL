@@ -76,6 +76,8 @@ The code structure is relatively clear and each algorithm is placed in a separat
 │   └── generate_truth_UKF.m
 │
 └── README.md
+
+}
 ## Citation
 
 If you find this repository helpful, please consider citing the following paper:
@@ -86,4 +88,3 @@ If you find this repository helpful, please consider citing the following paper:
   author    = {Li, Muyang and Garc{\'i}a-Fern{\'a}ndez, {\'A}ngel F.},
   booktitle = {Proceedings of the 2024 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)},
   year      = {2024}
-}
